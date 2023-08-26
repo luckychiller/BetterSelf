@@ -11,45 +11,35 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloController {
+public class SignUpController {
     private Stage stage;
     private Scene scene;
     private Parent root;
     @FXML
     private Label welcomeText;
     @FXML
-    private Button LoginButton;
+    private Button SignUpButton;
     @FXML
-    private TextField LoginEmail;
+    private TextField Name;
     @FXML
-    private PasswordField LoginPassword;
+    private ComboBox<String> Country;
     @FXML
-    private Hyperlink SignUp;
+    private DatePicker DateOfBirth;
+    @FXML
+    private ComboBox<String> genderComboBox;
+    @FXML
+    private TextField SignUpEmail;
+    @FXML
+    private PasswordField SignUpPassword;
+    @FXML
+    private PasswordField RptSignUpPassword;
+    @FXML
+    private Hyperlink LogIn;
     @FXML
     private Hyperlink Help;
     @FXML
-    protected void onLogInButtonClick(ActionEvent event) throws IOException {
-        String email = LoginEmail.getText();
-        String password = LoginPassword.getText();
-
-        if (email== "wasswalutufi@iut-dhaka.edu") {
-            if(password=="01234") {
-            welcomeText.setText("Access Granted");
-        }
-            else
-                if (email== "mahajabin@iut-dhaka.edu") {
-                    if (password == "56789") {
-                        welcomeText.setText("Access Granted");
-                    }
-                }
-                else {
-                    welcomeText.setText("Access Granted");
-                }
-        }
-    }
-    @FXML
-    protected void onSignUpLinkClick(ActionEvent event) throws IOException {
-        root= FXMLLoader.load(getClass().getResource("SignUp-view.fxml"));
+    protected void onLogInLinkClick(ActionEvent event) throws IOException {
+        root= FXMLLoader.load(getClass().getResource("hello-view.fxml"));
         stage=(Stage)((Node)event.getSource()).getScene().getWindow();
         scene=new Scene(root,752,641);
         stage.setTitle("BetterSelf -> SIgnUp");
