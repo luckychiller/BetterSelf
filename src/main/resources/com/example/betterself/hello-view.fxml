@@ -1,22 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TextField?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="641.0" prefWidth="752.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19" fx:controller="com.example.betterself.HelloController">
+<VBox alignment="CENTER" maxHeight="641.0" maxWidth="752.0" minHeight="641.0" minWidth="752.0" prefHeight="641.0" prefWidth="752.0" spacing="20.0" styleClass="background" stylesheets="@loginSignup.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.betterself.HelloController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
     <Label fx:id="welcomeText" />
-   <TextField fx:id="LoginEmail" promptText="Email" cache="true" prefHeight="26.0" prefWidth="571.0" />
-   <PasswordField fx:id="LoginPassword" promptText="Password" />
-    <Button fx:id="LoginButton" onAction="#onLogInButtonClick" text="Login" />
-   <Hyperlink fx:id="SignUp" onAction="#onSignUpLinkClick" text="Sign Up" />
-   <Hyperlink fx:id="Help" onAction="#onHelpLinkClick" text="Help" />
+   <TextField fx:id="LoginEmail" cache="true" prefHeight="38.0" prefWidth="657.0" promptText="Email" stylesheets="@loginSignup.css">
+      <styleClass>
+         <String fx:value="cursor_hand" />
+         <String fx:value="username_pass_button" />
+      </styleClass></TextField>
+   <PasswordField fx:id="LoginPassword" promptText="Password" stylesheets="@loginSignup.css">
+      <styleClass>
+         <String fx:value="username_pass_button" />
+         <String fx:value="cursor_hand" />
+      </styleClass></PasswordField>
+    <Button fx:id="LoginButton" onAction="#onLogInButtonClick" stylesheets="@loginSignup.css" text="Login">
+      <styleClass>
+         <String fx:value="login_button" />
+         <String fx:value="cursor_hand" />
+      </styleClass></Button>
+   <Hyperlink fx:id="SignUp" onAction="#onSignUpLinkClick" stylesheets="@loginSignup.css" text="Sign Up">
+      <styleClass>
+         <String fx:value="signup_button" />
+         <String fx:value="cursor_hand" />
+      </styleClass></Hyperlink>
+   <Hyperlink fx:id="Help" onAction="#onHelpLinkClick" stylesheets="@loginSignup.css" text="Help">
+      <styleClass>
+         <String fx:value="signup_button" />
+         <String fx:value="cursor_hand" />
+      </styleClass></Hyperlink>
 </VBox>

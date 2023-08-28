@@ -1,0 +1,49 @@
+.background{
+    -fx-background-image: url("loginSignup_grass.png");
+    -fx-background-size: 100% 100%;
+
+}
+
+/*.vbox_background_center{*/
+/*    //-fx-background-image: url("login.png");*/
+
+/*}*/
+.vbox_background_left {
+    -fx-background-color: #3d251e;
+
+}
+.signup_button{
+    -fx-background-color:#ffff66;
+    -fx-font-size: 16;
+}
+.signup_button:hover{
+    -fx-background-color:#ffecc6;
+    -fx-font-size: 16;
+}
+.login_button{
+    -fx-background-color:#ffecc6;
+    -fx-font-size: 16;
+
+}
+.login_button:hover {
+    -fx-background-color:#ffffff;
+    -fx-font-size: 16;
+
+}
+.username_pass_button{
+    /*-fx-background-color: linear-gradient(to right, #f6d365 0%, #fda085 51%, #f6d365 100%);*/
+
+    -fx-background-color: #ffffff;
+    -fx-font-size: 16;
+
+}
+
+.username_pass_button:hover{
+    /*-fx-background-position: right left; !* change the direction of the change here *!*/
+    -fx-background-color:#ffecc6;
+    -fx-font-size: 16;
+
+}
+.cursor_hand{
+    -fx-cursor: hand;
+}
