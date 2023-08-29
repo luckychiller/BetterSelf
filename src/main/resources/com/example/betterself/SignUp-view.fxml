@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="633.0" prefWidth="764.0" styleClass="background" stylesheets="@loginSignup.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.betterself.SignUpController">
+<AnchorPane prefHeight="633.0" prefWidth="764.0" styleClass="background" stylesheets="@loginSignup.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.betterself.SignUpController">
    <children>
       <TextField fx:id="Name" layoutX="202.0" layoutY="137.0" prefHeight="25.0" prefWidth="308.0" promptText="Name" stylesheets="@loginSignup.css">
          <styleClass>
@@ -35,7 +35,7 @@
             <String fx:value="cursor_hand" />
             <String fx:value="username_pass_button" />
          </styleClass></PasswordField>
-      <Button fx:id="SignUpButton" layoutX="294.0" layoutY="450.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" stylesheets="@loginSignup.css" text="SignUp">
+      <Button fx:id="SignUpButton" layoutX="294.0" layoutY="450.0" mnemonicParsing="false" onAction="#onSignUpButtonClick" prefHeight="25.0" prefWidth="149.0" stylesheets="@loginSignup.css" text="SignUp">
          <styleClass>
             <String fx:value="login_button" />
             <String fx:value="cursor_hand" />

@@ -4,10 +4,9 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.betterself.HelpController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.betterself.HelpController">
    <children>
       <Label fx:id="HelpText" layoutX="214.0" layoutY="65.0" prefHeight="153.0" prefWidth="131.0" text="Help" />
-      <Button fx:id="BackButton" layoutX="254.0" layoutY="302.0" mnemonicParsing="false" text="Back" />
+      <Button fx:id="BackButton" layoutX="254.0" layoutY="302.0" mnemonicParsing="false" onAction="#onBackButtonClick" text="Back" />
    </children>
 </AnchorPane>
