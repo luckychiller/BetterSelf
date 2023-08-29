@@ -10,6 +10,8 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
+import java.sql.*;
 
 public class HelloController {
     private Stage stage;
@@ -27,40 +29,54 @@ public class HelloController {
     private Hyperlink SignUp;
     @FXML
     private Hyperlink Help;
+
     @FXML
     protected void onLogInButtonClick(ActionEvent event) throws IOException {
         String email = LoginEmail.getText();
         String password = LoginPassword.getText();
 
-        if (email== "wasswalutufi@iut-dhaka.edu") {
-            if(password=="01234") {
-            welcomeText.setText("Access Granted");
+        java.sql.Connection con= null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Error loading the driver" + e);
         }
-            else
-                if (email== "mahajabin@iut-dhaka.edu") {
-                    if (password == "56789") {
-                        welcomeText.setText("Access Granted");
-                    }
-                }
-                else {
-                    welcomeText.setText("Access Granted");
-                }
+        try {
+            con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "system", "user1156");
+            String sql="select * from BETTERUSER where email = ? and password = ?";
+            PreparedStatement statement=con.prepareStatement(sql);
+            statement.setString(1,email);
+            statement.setString(2,password);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                root = FXMLLoader.load(getClass().getResource("Dashboard-view.fxml"));
+                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                scene = new Scene(root, 752, 641);
+                stage.setTitle("BetterSelf");
+                stage.setScene(scene);
+                stage.show();
+                System.out.println("Access Granted");
+            } else {
+                welcomeText.setText("Access Denied");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
     @FXML
-    protected void onSignUpLinkClick(ActionEvent event) throws IOException {
-        root= FXMLLoader.load(getClass().getResource("SignUp-view.fxml"));
-        stage=(Stage)((Node)event.getSource()).getScene().getWindow();
-        scene=new Scene(root,752,641);
+    protected void onSignUpLinkClick (ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("SignUp-view.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root, 752, 641);
         stage.setTitle("BetterSelf -> SIgnUp");
         stage.setScene(scene);
         stage.show();
     }
     @FXML
-    protected void onHelpLinkClick(ActionEvent event) throws IOException {
-        root= FXMLLoader.load(getClass().getResource("Help-view.fxml"));
-        stage=(Stage)((Node)event.getSource()).getScene().getWindow();
-        scene=new Scene(root,752,641);
+    protected void onHelpLinkClick (ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("Help-view.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root, 752, 641);
         stage.setTitle("BetterSelf -> Help");
         stage.setScene(scene);
         stage.show();
