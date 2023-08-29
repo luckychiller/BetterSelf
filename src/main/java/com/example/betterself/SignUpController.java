@@ -86,26 +86,38 @@ public class SignUpController {
             if (InputCode.equals(Integer.toString(verificationCode))) {
                 java.sql.Connection con= null;
                 try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    Class.forName("oracle.jdbc.OracleDriver");
                 } catch (ClassNotFoundException e) {
                     System.out.println("Error loading the driver" + e);
                 }
                 try {
-                    con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "system", "user1156");
+                    con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "user1156");
                     String sql="insert into BETTERUSER(NAME,DateOfBirth,EMAIL,PASSWORD) values(?,to_date(?,'mm/dd/yyyy'),?,?)";
                     PreparedStatement statement=con.prepareStatement(sql);
                     statement.setString(1,UserName);
-                    statement.setString(3,UserDOB);
-                    statement.setString(5,recipientEmail);
-                    statement.setString(6,UserPassWord);
+                    statement.setString(2,UserDOB);
+                    statement.setString(3,recipientEmail);
+                    statement.setString(4,UserPassWord);
                     statement.executeUpdate();
                     System.out.println("Inserted");
+                    con.close();
+                    showSuccessAlert("Verification Successful", "Your account has been verified! you can now login from the login page.");
+                    Name.clear();
+                    DateOfBirth.setValue(null);
+                    SignUpEmail.clear();
+                    SignUpPassword.clear();
+                    RptSignUpPassword.clear();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-                showSuccessAlert("Verification Successful", "Your account has been verified!");
             } else {
-                showErrorAlert("Verification Failed", "Invalid verification code. Please try again.");
+                showErrorAlert("Verification Failed", "Invalid verification code. Please try again later.");
+                //erase all the inputted fields
+                Name.clear();
+                DateOfBirth.setValue(null);
+                SignUpEmail.clear();
+                SignUpPassword.clear();
+                RptSignUpPassword.clear();
             }
         });
     }

@@ -37,18 +37,19 @@ public class HelloController {
 
         java.sql.Connection con= null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("oracle.jdbc.OracleDriver");
         } catch (ClassNotFoundException e) {
             System.out.println("Error loading the driver" + e);
         }
         try {
-            con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "system", "user1156");
+            con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "user1156");
             String sql="select * from BETTERUSER where email = ? and password = ?";
             PreparedStatement statement=con.prepareStatement(sql);
             statement.setString(1,email);
             statement.setString(2,password);
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
+                con.close();
                 root = FXMLLoader.load(getClass().getResource("Dashboard-view.fxml"));
                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 scene = new Scene(root, 752, 641);
@@ -58,6 +59,8 @@ public class HelloController {
                 System.out.println("Access Granted");
             } else {
                 welcomeText.setText("Access Denied");
+                LoginEmail.clear();
+                LoginPassword.clear();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
