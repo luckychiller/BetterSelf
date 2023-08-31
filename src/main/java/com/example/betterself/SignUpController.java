@@ -14,11 +14,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextInputDialog;
 
 import java.io.IOException;
-import java.util.Properties;
-import java.util.Random;
+//import java.util.Properties;
+//import java.util.Random;
 
-import javax.mail.*;
-import javax.mail.internet.*;
+//import javax.mail.*;
+//import javax.mail.internet.*;
 import java.sql.*;
 
 public class SignUpController {
@@ -46,17 +46,17 @@ public class SignUpController {
     public Connection con;
     @FXML
     protected void onSignUpButtonClick(ActionEvent event) throws Exception {
-        Random random = new Random();
+        /*Random random = new Random();
         int verificationCode = 100000 + random.nextInt(900000);
         final String senderEmail = "wasswalutufi@iut-dhaka.edu";
-        final String senderPassword = "424Poseidon.";
+        final String senderPassword = "424Poseidon.";*/
         String UserName = Name.getText();
         String UserDOB = DateOfBirth.getPromptText();
         String recipientEmail=SignUpEmail.getText();
         String UserPassWord = SignUpPassword.getText();
         String ConfUserPass = RptSignUpPassword.getText();
 
-        Session session = Session.getInstance(
+        /*Session session = Session.getInstance(
                 new Properties() {
                     {
                         setProperty("mail.smtp.host", "smtp.gmail.com");
@@ -84,7 +84,7 @@ public class SignUpController {
         dialog.setContentText("Verification Code:");
 
         dialog.showAndWait().ifPresent(InputCode -> {
-            if (InputCode.equals(Integer.toString(verificationCode))) {
+            if (InputCode.equals(Integer.toString(verificationCode))) {*/
                 java.sql.Connection con= null;
                 try {
                     Class.forName("oracle.jdbc.OracleDriver");
@@ -93,16 +93,17 @@ public class SignUpController {
                 }
                 try {
                     con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "user1156");
-                    String sql="insert into BETTERUSER(NAME,DateOfBirth,EMAIL,PASSWORD) values(?,to_date(?,'mm/dd/yyyy'),?,?)";
+                    String sql="insert into BETTERUSER(NAME,EMAIL,PASSWORD) values(?,?,?)";
                     PreparedStatement statement=con.prepareStatement(sql);
                     statement.setString(1,UserName);
-                    statement.setString(2,UserDOB);
-                    statement.setString(3,recipientEmail);
-                    statement.setString(4,UserPassWord);
+                    //statement.setString(2,UserDOB);
+                    statement.setString(2,recipientEmail);
+                    statement.setString(3,UserPassWord);
                     statement.executeUpdate();
                     System.out.println("Inserted");
                     con.close();
-                    showSuccessAlert("Verification Successful", "Your account has been verified! you can now login from the login page.");
+                    //welcomeText.setText("Success");
+                    //showSuccessAlert("Verification Successful", "Your account has been verified! you can now login from the login page.");
                     Name.clear();
                     DateOfBirth.setValue(null);
                     SignUpEmail.clear();
@@ -111,7 +112,7 @@ public class SignUpController {
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-            } else {
+            /*} else {
                 showErrorAlert("Verification Failed", "Invalid verification code. Please try again later.");
                 //erase all the inputted fields
                 Name.clear();
@@ -119,8 +120,8 @@ public class SignUpController {
                 SignUpEmail.clear();
                 SignUpPassword.clear();
                 RptSignUpPassword.clear();
-            }
-        });
+            }*/
+    //    });
     }
     @FXML
     protected void onLogInLinkClick(ActionEvent event) throws IOException {
@@ -143,9 +144,9 @@ public class SignUpController {
     private void showSuccessAlert(String title, String content) {
         showAlert(AlertType.INFORMATION, title, content);
     }
-    private void showErrorAlert(String title, String content) {
+    /*private void showErrorAlert(String title, String content) {
         showAlert(AlertType.ERROR, title, content);
-    }
+    }*/
     private void showAlert(AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
