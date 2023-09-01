@@ -1,22 +1,43 @@
 /*Colors*/
-/*Green:  #c9f400; */
-/*dark green: #4fa12a; */
-
-
+/*light Sky:  #A4EAFF; */
+/*light Yellow: #FEFF6E; */
+/*light green:  #c9f400;*/
+/*deep green: #4fa12a*/
+/*burnt orange: #e69138;*/
 
 .backGround{
-    /*-fx-background-color: white;*/
-    -fx-background-color: linear-gradient(to left, #FFFFFF, #FADF77);
+    -fx-background-color: #fff2cc;
+    /*-fx-background-color: linear-gradient(to right, #FFF1A1, #4CE7FF);*/
 
 }
+.task_list{
+    /*-fx-background-color: fff2cc;*/
+    /*-fx-background-color: linear-gradient(to right, #A4EAFF, #FEFF6E);*/
 
+    -fx-background-color: radial-gradient(
+            center 50% 50%, /* Center point (default is 50% 50%) */
+            radius 50%, /* Radius (default is 50%) */
+            #a2c4c9,      /* Inner color */
+            #fff2cc       /* Outer color */
+    );
+
+}
 .side_Nav{
-    -fx-background-color: #c9f400;
+    -fx-background-color: #fff2cc;
 
 }
-.side_Nav:hover{
+.side_Nav_Button{
+    -fx-background-color: #fff2cc;
+    -fx-alignment: center-left;
+}
+.side_Nav_Button:hover{
     -fx-cursor: hand;
-    -fx-background-color: #4fa12a;
+    /*-fx-rotate: 5;*/
+    -fx-alignment: center;
+    -fx-background-color: linear-gradient(to right, #a2c4c9, #fff2cc);
 
 }
 
+.logout_button{
+    -fx-background-image: url("logo1.png");
+}

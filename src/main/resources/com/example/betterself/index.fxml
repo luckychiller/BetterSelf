@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -17,21 +18,25 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="backGround" stylesheets="@Index.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.betterself.Index">
+<AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1722.0" prefHeight="1080.0" prefWidth="1722.0" styleClass="backGround" stylesheets="@Index.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.betterself.Index">
    <children>
       <HBox layoutX="18.0" layoutY="17.0" prefHeight="192.0" prefWidth="880.0" />
-      <VBox layoutX="277.0" layoutY="125.0" prefHeight="1080.0" prefWidth="1193.0">
+      <VBox layoutX="221.0" layoutY="125.0" prefHeight="954.0" prefWidth="918.0" styleClass="task_list" stylesheets="@Index.css">
          <children>
-            <HBox prefHeight="33.0" prefWidth="546.0">
+            <HBox prefHeight="67.0" prefWidth="918.0">
                <children>
-                  <TextField prefHeight="25.0" prefWidth="185.0" promptText="Add Task" />
-                  <DatePicker promptText="Due Date" />
-                  <ComboBox prefHeight="25.0" prefWidth="156.0" promptText="Activity Type" visibleRowCount="3" />
-                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="29.0" text="+" />
+                  <TextField prefHeight="45.0" prefWidth="498.0" promptText="Add Task">
+                     <font>
+                        <Font size="16.0" />
+                     </font></TextField>
+                  <DatePicker prefHeight="46.0" prefWidth="128.0" promptText="Due Date" />
+                  <ComboBox editable="true" prefHeight="46.0" prefWidth="184.0" promptText="Activity Type" visibleRowCount="3" />
+                  <Button mnemonicParsing="false" prefHeight="46.0" prefWidth="48.0" text="+" />
                </children>
             </HBox>
-            <TableView prefHeight="400.0" prefWidth="1253.0">
+            <TableView prefHeight="412.0" prefWidth="918.0">
               <columns>
                 <TableColumn prefWidth="75.0" text="Status" />
                 <TableColumn prefWidth="150.40003967285156" text="Task" />
@@ -39,18 +44,18 @@
                   <TableColumn minWidth="0.0" prefWidth="587.1998901367188" text="Remark" />
               </columns>
                <VBox.margin>
-                  <Insets top="50.0" />
+                  <Insets />
                </VBox.margin>
             </TableView>
          </children>
       </VBox>
-      <VBox layoutX="1485.0" layoutY="209.0" prefHeight="838.0" prefWidth="390.0">
+      <VBox layoutX="1155.0" layoutY="191.0" prefHeight="856.0" prefWidth="360.0">
          <children>
             <ListView prefHeight="200.0" prefWidth="200.0" />
             <PieChart />
             <ListView prefHeight="200.0" prefWidth="200.0" />
          </children></VBox>
-      <GridPane layoutX="25.0" layoutY="156.0" prefHeight="332.0" prefWidth="213.0" styleClass="side-navigation" stylesheets="@Index.css">
+      <GridPane alignment="CENTER" layoutX="48.0" layoutY="125.0" prefHeight="384.0" prefWidth="163.0" styleClass="side_Nav" stylesheets="@Index.css">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
@@ -65,21 +70,45 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="155.0" text="Dashboard" />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="165.0" text="My Timeline" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="127.0" text="History" GridPane.rowIndex="4" />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="My Team" GridPane.rowIndex="2" />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Leaderboard" GridPane.rowIndex="3" />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="133.0" text="Settings" GridPane.rowIndex="5" />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="About Us" GridPane.rowIndex="6" />
+            <Button mnemonicParsing="false" prefHeight="81.0" prefWidth="287.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="Dashboard">
+               <font>
+                  <Font size="16.0" />
+               </font></Button>
+            <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="270.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="My Timeline" GridPane.rowIndex="1">
+               <font>
+                  <Font size="16.0" />
+               </font></Button>
+            <Button mnemonicParsing="false" prefHeight="64.0" prefWidth="242.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="History" GridPane.rowIndex="4">
+               <font>
+                  <Font size="16.0" />
+               </font></Button>
+            <Button mnemonicParsing="false" prefHeight="58.0" prefWidth="256.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="My Team" GridPane.rowIndex="2">
+               <font>
+                  <Font size="16.0" />
+               </font></Button>
+            <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="256.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="Leaderboard" GridPane.rowIndex="3">
+               <font>
+                  <Font size="16.0" />
+               </font></Button>
+            <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="Settings" GridPane.rowIndex="5">
+               <font>
+                  <Font size="16.0" />
+               </font></Button>
+            <Button mnemonicParsing="false" prefHeight="98.0" prefWidth="214.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="About Us" GridPane.rowIndex="6">
+               <font>
+                  <Font size="16.0" />
+               </font></Button>
          </children>
       </GridPane>
       <StackPane layoutX="33.0" layoutY="14.0" prefHeight="90.0" prefWidth="122.0">
          <children>
-            <ImageView fitHeight="91.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="112.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="logo">
+               <image>
+                  <Image url="@logo1.png" />
+               </image></ImageView>
          </children>
       </StackPane>
-      <Button layoutX="1784.0" layoutY="47.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0" text="LogOut" />
-      <Button layoutX="1698.0" layoutY="47.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="49.0" text="Help" />
+      <Button layoutX="1434.0" layoutY="47.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0" styleClass="logout_button" text="LogOut" />
+      <Button layoutX="1365.0" layoutY="47.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="49.0" text="Help" />
    </children>
 </AnchorPane>
