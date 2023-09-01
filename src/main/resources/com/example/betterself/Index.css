@@ -1,0 +1,22 @@
+/*Colors*/
+/*Green:  #c9f400; */
+/*dark green: #4fa12a; */
+
+
+
+.backGround{
+    /*-fx-background-color: white;*/
+    -fx-background-color: linear-gradient(to left, #FFFFFF, #FADF77);
+
+}
+
+.side_Nav{
+    -fx-background-color: #c9f400;
+
+}
+.side_Nav:hover{
+    -fx-cursor: hand;
+    -fx-background-color: #4fa12a;
+
+}
+
