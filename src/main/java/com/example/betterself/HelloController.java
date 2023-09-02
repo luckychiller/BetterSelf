@@ -50,7 +50,7 @@ public class HelloController {
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
                 con.close();
-                root = FXMLLoader.load(getClass().getResource("Dashboard-view.fxml"));
+                root = FXMLLoader.load(getClass().getResource("index.fxml"));
                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 scene = new Scene(root, 752, 641);
                 stage.setTitle("BetterSelf");
