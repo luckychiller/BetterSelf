@@ -7,9 +7,11 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -19,13 +21,21 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="784.0" minWidth="1357.0" prefHeight="784.0" prefWidth="1357.0" styleClass="backGround" stylesheets="@Index.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.betterself.IndexController">
    <children>
-      <Button layoutX="1251.0" layoutY="47.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0" styleClass="logout_button" text="LogOut" />
-      <Button layoutX="1182.0" layoutY="47.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="49.0" text="Help" />
-      <HBox layoutX="18.0" layoutY="17.0" prefHeight="192.0" prefWidth="880.0" />
+      <HBox layoutX="18.0" layoutY="17.0" opacity="0.28" prefHeight="192.0" prefWidth="1301.0">
+         <effect>
+            <Shadow height="82.07" radius="35.405" width="61.55">
+               <color>
+                  <Color red="0.5526315569877625" green="0.23282164335250854" blue="0.23282164335250854" />
+               </color>
+            </Shadow>
+         </effect></HBox>
+      <Button layoutX="1251.0" layoutY="47.0" mnemonicParsing="false" onAction="#onLogOutClick" prefHeight="25.0" prefWidth="57.0" styleClass="logout_button" text="LogOut" />
+      <Button layoutX="1182.0" layoutY="47.0" mnemonicParsing="false" onAction="#onHelpButtonClick" prefHeight="25.0" prefWidth="49.0" text="Help" />
       <StackPane layoutX="33.0" layoutY="14.0" prefHeight="90.0" prefWidth="122.0">
          <children>
             <ImageView fitHeight="112.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="logo">
@@ -85,7 +95,7 @@
                </font></Button>
          </children>
       </GridPane>
-      <VBox fx:id="Dashboard" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" styleClass="task_list" stylesheets="@Index.css">
+      <VBox fx:id="Dashboard" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" styleClass="task_list" stylesheets="@Index.css" visible="false">
          <children>
             <HBox prefHeight="67.0" prefWidth="918.0">
                <children>
@@ -135,13 +145,15 @@
             </Label>
          </children>
       </VBox>
-      <VBox fx:id="Setting" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" visible="false">
+      <VBox fx:id="Setting" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0">
          <children>
-            <Label prefHeight="316.0" prefWidth="494.0" text="Settings">
-               <font>
-                  <Font size="43.0" />
-               </font>
-            </Label>
+            <AnchorPane prefHeight="693.0" prefWidth="713.0">
+               <children>
+                  <Label layoutX="308.0" layoutY="573.0" text="Light" textFill="#651515f5" />
+                  <Label layoutX="379.0" layoutY="573.0" text="Dark" />
+                  <Slider blockIncrement="1.0" layoutX="338.0" layoutY="574.0" majorTickUnit="1" max="1.0" minorTickCount="1" prefHeight="10.0" prefWidth="0.0" snapToTicks="true" />
+               </children>
+            </AnchorPane>
          </children>
       </VBox>
       <VBox fx:id="History" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" visible="false">

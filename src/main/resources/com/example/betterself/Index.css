@@ -41,3 +41,7 @@
 .logout_button{
     -fx-background-image: url("logo1.png");
 }
+
+.upper_Ribbon{
+    -fx-background-color: #8d3b3b;
+}
