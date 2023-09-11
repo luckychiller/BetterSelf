@@ -1,10 +1,6 @@
 package com.example.betterself;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,8 +8,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -64,19 +63,8 @@ public class IndexController implements Initializable{
     private DatePicker AddTaskDate;
     @FXML
     private ComboBox<String> AddTaskType;
-    //@FXML
-    //TableView<ItemDTO> tableView;
     @FXML
-    ListView<ItemDTO> TodoList;
-//    @FXML
-//    private TableColumn<ItemDTO,String> status;
-//    @FXML
-//    private TableColumn<ItemDTO,String> task;
-//    @FXML
-//    private TableColumn<ItemDTO,String> due;
-//    @FXML
-//    private TableColumn<ItemDTO,Button> edit;
-    ObservableList<ItemDTO> observableList = FXCollections.observableArrayList();
+    ListView<HBox> TodoList;
     @FXML
     private void OnAddItemButtonClicked(ActionEvent event) throws IOException {
         String aa = AddTaskName.getText();
@@ -85,22 +73,32 @@ public class IndexController implements Initializable{
         String bb = selectedDate.format(formatter);
         Button closeString = new Button("X");
 
-        ItemDTO newItem = new ItemDTO("New", aa, bb, closeString);
-        observableList.add(newItem);
+        HBox hbox = new HBox();
         AddTaskName.clear();
         AddTaskDate.setValue(null);
 
         closeString.setOnAction(e -> {
-            System.out.println(closeString.getParent());
-            int rowIndex = observableList.indexOf(closeString.getParent());
-            System.out.println("Close button in row " + rowIndex + " clicked.");
-            if (rowIndex >= 0) {
-                System.out.println("Close button in row " + rowIndex + " clicked.");
-                observableList.remove(rowIndex);
-                //other acitivities
-            }
+            HBox hbox1 = (HBox) closeString.getParent();
+            TodoList.getItems().remove(hbox1);
         });
 
+        Label taskLabel = new Label(aa);
+        taskLabel.setPrefWidth(250);
+        taskLabel.setTextFill(Color.RED);
+        taskLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+
+        Label dateLabel = new Label(bb);
+        dateLabel.setPrefWidth(150);
+        dateLabel.setTextFill(Color.BLUE);
+        dateLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 14));
+
+        closeString.setStyle("-fx-background-color: #0000FF; -fx-text-fill: #FFFFFF");
+
+        hbox.getChildren().add(taskLabel);
+        hbox.getChildren().add(dateLabel);
+        hbox.getChildren().add(closeString);
+
+        TodoList.getItems().add(hbox);
     }
     @FXML
     private void OnDashboardButtonClick(ActionEvent event) throws IOException{
@@ -192,16 +190,8 @@ public class IndexController implements Initializable{
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        TodoList.setItems(observableList);
         TodoList.refresh();
         TodoList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        //        tableView.setItems(observableList);
-//        tableView.refresh();
-//        tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-//        status.setCellValueFactory(new PropertyValueFactory<>("status"));
-//        task.setCellValueFactory(new PropertyValueFactory<>("task"));
-//        due.setCellValueFactory(new PropertyValueFactory<>("due"));
-//        edit.setCellValueFactory(new PropertyValueFactory<>("edit"));
         AddTaskType.getItems().addAll("Make It Habbit", "Time Bound", "Streak");
         //load all items from the database.
     }
