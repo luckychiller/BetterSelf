@@ -7,6 +7,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -26,7 +27,7 @@
 
 <AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="784.0" minWidth="1357.0" prefHeight="784.0" prefWidth="1357.0" styleClass="backGround" stylesheets="@Index.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.betterself.IndexController">
    <children>
-      <HBox layoutX="18.0" layoutY="17.0" opacity="0.28" prefHeight="192.0" prefWidth="1301.0">
+      <HBox layoutY="7.0" opacity="0.28" prefHeight="122.0" prefWidth="1357.0">
          <effect>
             <Shadow height="82.07" radius="35.405" width="61.55">
                <color>
@@ -69,11 +70,11 @@
                <font>
                   <Font size="16.0" />
                </font></Button>
-            <Button fx:id="My_TimelineButton" mnemonicParsing="false" onAction="#My_TimelineButtonClick" prefHeight="70.0" prefWidth="270.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="My Timeline" GridPane.rowIndex="1">
+            <Button fx:id="My_ProgressButton" mnemonicParsing="false" onAction="#My_ProgressButtonClick" prefHeight="70.0" prefWidth="270.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="My Progress" GridPane.rowIndex="1">
                <font>
                   <Font size="16.0" />
                </font></Button>
-            <Button fx:id="HistoryButton" mnemonicParsing="false" onAction="#HistoryButtonClick" prefHeight="64.0" prefWidth="242.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="History" GridPane.rowIndex="4">
+            <Button fx:id="TimelineButton" mnemonicParsing="false" onAction="#TimelineButtonClick" prefHeight="64.0" prefWidth="242.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="My Timeline" GridPane.rowIndex="4">
                <font>
                   <Font size="16.0" />
                </font></Button>
@@ -95,7 +96,7 @@
                </font></Button>
          </children>
       </GridPane>
-      <VBox fx:id="Dashboard" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" styleClass="task_list" stylesheets="@Index.css" visible="false">
+      <VBox layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" styleClass="task_list" stylesheets="@Index.css" visible="false">
          <children>
             <HBox prefHeight="67.0" prefWidth="918.0">
                <children>
@@ -105,15 +106,15 @@
                      </font></TextField>
                   <DatePicker prefHeight="46.0" prefWidth="182.0" promptText="Due Date" />
                   <ComboBox editable="true" prefHeight="46.0" prefWidth="188.0" promptText="Activity Type" visibleRowCount="3" />
-                  <Button mnemonicParsing="false" prefHeight="46.0" prefWidth="46.0" text="+" />
+                  <Button mnemonicParsing="false" onAction="#OnAddItemButtonClicked" prefHeight="46.0" prefWidth="46.0" text="+" />
                </children>
             </HBox>
-            <TableView prefHeight="412.0" prefWidth="689.0">
+            <TableView prefHeight="584.0" prefWidth="713.0">
               <columns>
-                <TableColumn prefWidth="89.0" text="Status" />
-                <TableColumn prefWidth="206.0" text="Task" />
-                  <TableColumn minWidth="0.0" prefWidth="78.0" text="Due" />
-                  <TableColumn maxWidth="2600.0" minWidth="0.0" prefWidth="339.0" text="Remark" />
+                <TableColumn fx:id="status" prefWidth="93.0" text="Status" />
+                <TableColumn fx:id="task" prefWidth="317.0" text="Task" />
+                  <TableColumn fx:id="due" minWidth="0.0" prefWidth="171.0" text="Due" />
+                  <TableColumn fx:id="edit" maxWidth="2600.0" minWidth="0.0" prefWidth="131.0" text="Remove" />
               </columns>
                <VBox.margin>
                   <Insets />
@@ -145,7 +146,7 @@
             </Label>
          </children>
       </VBox>
-      <VBox fx:id="Setting" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0">
+      <VBox fx:id="Setting" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" visible="false">
          <children>
             <AnchorPane prefHeight="693.0" prefWidth="713.0">
                <children>
@@ -156,7 +157,7 @@
             </AnchorPane>
          </children>
       </VBox>
-      <VBox fx:id="History" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" visible="false">
+      <VBox fx:id="Timeline" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" visible="false">
          <children>
             <Label prefHeight="399.0" prefWidth="404.0" text="History">
                <font>
@@ -183,13 +184,32 @@
             </Label>
          </children>
       </VBox>
-      <VBox fx:id="My_Timeline" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" visible="false">
+      <VBox fx:id="My_Progress" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" visible="false">
          <children>
-            <Label prefHeight="244.0" prefWidth="319.0" text="My Timeline">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </Label>
+            <AnchorPane prefHeight="674.0" prefWidth="713.0">
+               <children>
+                  <ScrollPane layoutX="70.0" layoutY="68.0" prefHeight="206.0" prefWidth="582.0" />
+                  <Label layoutX="70.0" layoutY="40.0" prefHeight="25.0" prefWidth="182.0" text="Streak" />
+                  <Label layoutX="79.0" layoutY="326.0" prefHeight="25.0" prefWidth="122.0" text="Graph" />
+                  <ScrollPane layoutX="75.0" layoutY="355.0" prefHeight="239.0" prefWidth="582.0" />
+               </children>
+            </AnchorPane>
+         </children></VBox>
+      <VBox fx:id="Dashboard" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" styleClass="task_list" stylesheets="@Index.css">
+         <children>
+            <HBox prefHeight="67.0" prefWidth="918.0">
+               <children>
+                  <TextField fx:id="AddTaskName" prefHeight="45.0" prefWidth="298.0" promptText="Add Task">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </TextField>
+                  <DatePicker fx:id="AddTaskDate" prefHeight="46.0" prefWidth="182.0" promptText="Due Date" />
+                  <ComboBox fx:id="AddTaskType" editable="true" prefHeight="46.0" prefWidth="188.0" promptText="Activity Type" visibleRowCount="3" />
+                  <Button fx:id="AddItem" mnemonicParsing="false" onAction="#OnAddItemButtonClicked" prefHeight="46.0" prefWidth="46.0" text="+" />
+               </children>
+            </HBox>
+            <ListView fx:id="TodoList" prefHeight="614.0" prefWidth="713.0" />
          </children>
       </VBox>
    </children>
