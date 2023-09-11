@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -66,11 +67,27 @@ public class IndexController implements Initializable{
     @FXML
     ListView<HBox> TodoList;
     @FXML
+    private PieChart ActivityChart;
+    private int MakeItHabbitCount=0,TimeBoundCount=0,StreakCount=0;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        TodoList.refresh();
+        TodoList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        AddTaskType.getItems().addAll("Make It Habbit", "Time Bound", "Streak");
+        PieChart.Data slice1 = new PieChart.Data("Make It Habbit", MakeItHabbitCount);
+        PieChart.Data slice2 = new PieChart.Data("Time Bound", TimeBoundCount);
+        PieChart.Data slice3 = new PieChart.Data("Streak", StreakCount);
+        ActivityChart.getData().addAll(slice1, slice2, slice3);
+        //load all items from the database.
+    }
+
+    @FXML
     private void OnAddItemButtonClicked(ActionEvent event) throws IOException {
         String aa = AddTaskName.getText();
         LocalDate selectedDate = AddTaskDate.getValue();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String bb = selectedDate.format(formatter);
+        String _TaskType = AddTaskType.getValue();
         Button closeString = new Button("X");
 
         HBox hbox = new HBox();
@@ -80,11 +97,19 @@ public class IndexController implements Initializable{
         closeString.setOnAction(e -> {
             HBox hbox1 = (HBox) closeString.getParent();
             TodoList.getItems().remove(hbox1);
+            Label qwerty = (Label) hbox1.getChildren().get(2);
+            String ttext = qwerty.getText();
+            UpdateActivityChart(ttext,-1);
         });
 
         Label taskLabel = new Label(aa);
         taskLabel.setPrefWidth(250);
         taskLabel.setTextFill(Color.RED);
+        taskLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+
+        Label taskType = new Label(_TaskType);
+        taskLabel.setPrefWidth(150);
+        taskLabel.setTextFill(Color.GREEN);
         taskLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
 
         Label dateLabel = new Label(bb);
@@ -96,9 +121,35 @@ public class IndexController implements Initializable{
 
         hbox.getChildren().add(taskLabel);
         hbox.getChildren().add(dateLabel);
+        hbox.getChildren().add(taskType);
         hbox.getChildren().add(closeString);
 
         TodoList.getItems().add(hbox);
+        UpdateActivityChart(_TaskType,1);
+    }
+    private void UpdateActivityChart(String TaskType,int Incrim){
+        if(TaskType.equals("Make It Habbit")) {
+            MakeItHabbitCount++;
+        }
+        else {
+            if (TaskType.equals("Time Bound")) {
+                TimeBoundCount++;
+            }
+            else {
+                StreakCount++;
+            }
+        }
+        PieChart.Data categoryAData = null;
+        for (PieChart.Data data : ActivityChart.getData()) {
+            if (data.getName().equals(TaskType)) {
+                categoryAData = data;
+                break;
+            }
+        }
+        if (categoryAData != null) {
+            categoryAData.setPieValue(categoryAData.getPieValue() + Incrim);
+            ActivityChart.setData(ActivityChart.getData());
+        }
     }
     @FXML
     private void OnDashboardButtonClick(ActionEvent event) throws IOException{
@@ -188,11 +239,5 @@ public class IndexController implements Initializable{
         stage.setScene(scene);
         stage.show();
     }
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        TodoList.refresh();
-        TodoList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        AddTaskType.getItems().addAll("Make It Habbit", "Time Bound", "Streak");
-        //load all items from the database.
-    }
+
 }
