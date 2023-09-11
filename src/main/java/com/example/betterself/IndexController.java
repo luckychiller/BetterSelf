@@ -239,5 +239,4 @@ public class IndexController implements Initializable{
         stage.setScene(scene);
         stage.show();
     }
-
 }
