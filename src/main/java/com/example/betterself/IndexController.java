@@ -7,7 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class IndexController implements Initializable{
@@ -55,8 +57,6 @@ public class IndexController implements Initializable{
     @FXML
     private Button About_UsButton;
     @FXML
-    private Slider ThemeChanger;
-    @FXML
     private Button AddItem;
     @FXML
     private TextField AddTaskName;
@@ -67,24 +67,89 @@ public class IndexController implements Initializable{
     @FXML
     ListView<HBox> TodoList;
     @FXML
+    private Label StreakLabel;
+    @FXML
     private PieChart ActivityChart;
-    private int MakeItHabbitCount=0,TimeBoundCount=0,StreakCount=0;
+    @FXML
+    private LineChart<Number,Number> DeadlineChart;
+    XYChart.Series<Number, Number> series1;
+    private int DailyDone=0,DailyIncomplete=0,TimeBoundCount=0,StreakCount=0;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //load all items from the database.
+        DeadlineChart = new LineChart<>(new NumberAxis(), new NumberAxis());
+        DeadlineChart.setCreateSymbols(true);
+        series1 = new XYChart.Series<>();
+        series1.setName("Finish Within");
+        DeadlineChart.getData().add(series1);
         TodoList.refresh();
         TodoList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        AddTaskType.getItems().addAll("Make It Habbit", "Time Bound", "Streak");
-        PieChart.Data slice1 = new PieChart.Data("Make It Habbit", MakeItHabbitCount);
-        PieChart.Data slice2 = new PieChart.Data("Time Bound", TimeBoundCount);
-        PieChart.Data slice3 = new PieChart.Data("Streak", StreakCount);
-        ActivityChart.getData().addAll(slice1, slice2, slice3);
-        //load all items from the database.
+        AddTaskType.getItems().addAll("Make It Habbit", "Finish Within", "Daily Duty");
+        PieChart.Data slice1 = new PieChart.Data("Complete", DailyDone);
+        PieChart.Data slice2 = new PieChart.Data("Incomplete", DailyIncomplete);
+        ActivityChart.getData().addAll(slice1, slice2);
     }
-
+    private void UpdateActivityChart(String TaskType,int Incrim,long days_left){
+        if(TaskType.equals("Make It Habbit")) {
+            StreakCount+=Incrim;
+            StreakLabel.setText(String.valueOf(StreakCount));
+        }
+        else {
+            if (TaskType.equals("Finish Within")) {
+                TimeBoundCount++;
+                XYChart.Data<Number, Number> dataPoint = new XYChart.Data<>(days_left, (Math.random())%5);
+                series1.getData().add(dataPoint);
+                DeadlineChart.layout();
+                //Add item and deadline to graph.
+            }
+            else {
+                PieChart.Data categoryAData = null;
+                if(Incrim>0){
+                    DailyIncomplete++;
+                    for (PieChart.Data data : ActivityChart.getData()) {
+                        if (data.getName().equals("Incomplete")) {
+                            categoryAData = data;
+                            break;
+                        }
+                    }
+                    if (categoryAData != null) {
+                        categoryAData.setPieValue(DailyIncomplete);
+                        ActivityChart.setData(ActivityChart.getData());
+                    }
+                }
+                else{
+                    DailyDone++;
+                    DailyIncomplete--;
+                    for (PieChart.Data data : ActivityChart.getData()) {
+                        if (data.getName().equals("Complete")) {
+                            categoryAData = data;
+                            break;
+                        }
+                    }
+                    if (categoryAData != null) {
+                        categoryAData.setPieValue(DailyDone);
+                        ActivityChart.setData(ActivityChart.getData());
+                    }
+                    for (PieChart.Data data : ActivityChart.getData()) {
+                        if (data.getName().equals("Incomplete")) {
+                            categoryAData = data;
+                            break;
+                        }
+                    }
+                    if (categoryAData != null) {
+                        categoryAData.setPieValue(DailyIncomplete);
+                        ActivityChart.setData(ActivityChart.getData());
+                    }
+                }
+            }
+        }
+    }
     @FXML
     private void OnAddItemButtonClicked(ActionEvent event) throws IOException {
         String aa = AddTaskName.getText();
         LocalDate selectedDate = AddTaskDate.getValue();
+        LocalDate today = LocalDate.now();
+        long daysBetween = today.until(selectedDate, ChronoUnit.DAYS);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String bb = selectedDate.format(formatter);
         String _TaskType = AddTaskType.getValue();
@@ -96,10 +161,10 @@ public class IndexController implements Initializable{
 
         closeString.setOnAction(e -> {
             HBox hbox1 = (HBox) closeString.getParent();
-            TodoList.getItems().remove(hbox1);
             Label qwerty = (Label) hbox1.getChildren().get(2);
+            TodoList.getItems().remove(hbox1);
             String ttext = qwerty.getText();
-            UpdateActivityChart(ttext,-1);
+            UpdateActivityChart(ttext,-1,daysBetween);
         });
 
         Label taskLabel = new Label(aa);
@@ -108,7 +173,7 @@ public class IndexController implements Initializable{
         taskLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
 
         Label taskType = new Label(_TaskType);
-        taskLabel.setPrefWidth(150);
+        taskLabel.setPrefWidth(200);
         taskLabel.setTextFill(Color.GREEN);
         taskLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
 
@@ -125,31 +190,7 @@ public class IndexController implements Initializable{
         hbox.getChildren().add(closeString);
 
         TodoList.getItems().add(hbox);
-        UpdateActivityChart(_TaskType,1);
-    }
-    private void UpdateActivityChart(String TaskType,int Incrim){
-        if(TaskType.equals("Make It Habbit")) {
-            MakeItHabbitCount++;
-        }
-        else {
-            if (TaskType.equals("Time Bound")) {
-                TimeBoundCount++;
-            }
-            else {
-                StreakCount++;
-            }
-        }
-        PieChart.Data categoryAData = null;
-        for (PieChart.Data data : ActivityChart.getData()) {
-            if (data.getName().equals(TaskType)) {
-                categoryAData = data;
-                break;
-            }
-        }
-        if (categoryAData != null) {
-            categoryAData.setPieValue(categoryAData.getPieValue() + Incrim);
-            ActivityChart.setData(ActivityChart.getData());
-        }
+        UpdateActivityChart(_TaskType,1,daysBetween);
     }
     @FXML
     private void OnDashboardButtonClick(ActionEvent event) throws IOException{
