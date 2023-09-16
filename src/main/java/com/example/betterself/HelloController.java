@@ -30,6 +30,7 @@ public class HelloController {
     @FXML
     private Hyperlink Help;
 
+
     @FXML
     protected void onLogInButtonClick(ActionEvent event) throws IOException {
         String email = LoginEmail.getText();
@@ -50,6 +51,16 @@ public class HelloController {
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
                 con.close();
+                IndexController.OurPerson=new UserData(
+                        rs.getInt("Id"),
+                        rs.getString("Name"),
+                        rs.getString("Email"),
+                        rs.getDate("DateOfBirth"),
+                        rs.getBytes("Profile_Pic"),
+                        rs.getString("Password"),
+                        rs.getInt("Total_Streaks"),
+                        rs.getInt("Total_Daily"),
+                        rs.getInt("Total_Deadlifts"));
                 root = FXMLLoader.load(getClass().getResource("index.fxml"));
                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 scene = new Scene(root, 752, 641);

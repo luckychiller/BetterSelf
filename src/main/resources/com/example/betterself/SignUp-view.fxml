@@ -4,33 +4,35 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="633.0" prefWidth="764.0" styleClass="background" stylesheets="@loginSignup.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.betterself.SignUpController">
    <children>
-      <TextField fx:id="Name" layoutX="202.0" layoutY="137.0" prefHeight="25.0" prefWidth="308.0" promptText="Name" stylesheets="@loginSignup.css">
+      <TextField fx:id="Name" layoutX="202.0" layoutY="168.0" prefHeight="25.0" prefWidth="308.0" promptText="Name" stylesheets="@loginSignup.css">
          <styleClass>
             <String fx:value="username_pass_button" />
             <String fx:value="cursor_hand" />
          </styleClass></TextField>
-      <TextField fx:id="SignUpEmail" layoutX="202.0" layoutY="192.0" prefHeight="25.0" prefWidth="308.0" promptText="Email" stylesheets="@loginSignup.css">
+      <TextField fx:id="SignUpEmail" layoutX="202.0" layoutY="206.0" prefHeight="25.0" prefWidth="308.0" promptText="Email" stylesheets="@loginSignup.css">
          <styleClass>
             <String fx:value="cursor_hand" />
             <String fx:value="username_pass_button" />
          </styleClass></TextField>
-      <DatePicker fx:id="DateOfBirth" layoutX="202.0" layoutY="249.0" prefHeight="25.0" prefWidth="308.0" promptText="Date of Birth" stylesheets="@loginSignup.css">
+      <DatePicker fx:id="DateOfBirth" layoutX="202.0" layoutY="241.0" prefHeight="25.0" prefWidth="308.0" promptText="Date of Birth" stylesheets="@loginSignup.css">
          <styleClass>
             <String fx:value="cursor_hand" />
             <String fx:value="username_pass_button" />
          </styleClass></DatePicker>
-      <PasswordField fx:id="SignUpPassword" layoutX="202.0" layoutY="317.0" prefHeight="25.0" prefWidth="308.0" promptText="Paasword (minimum 6 length)" stylesheets="@loginSignup.css">
+      <PasswordField fx:id="SignUpPassword" layoutX="202.0" layoutY="280.0" prefHeight="25.0" prefWidth="308.0" promptText="Password" stylesheets="@loginSignup.css">
          <styleClass>
             <String fx:value="cursor_hand" />
             <String fx:value="username_pass_button" />
          </styleClass></PasswordField>
-      <PasswordField fx:id="RptSignUpPassword" layoutX="202.0" layoutY="382.0" prefHeight="25.0" prefWidth="308.0" promptText="Rewrite password" stylesheets="@loginSignup.css">
+      <PasswordField fx:id="RptSignUpPassword" layoutX="202.0" layoutY="318.0" prefHeight="25.0" prefWidth="308.0" promptText="Rewrite password" stylesheets="@loginSignup.css">
          <styleClass>
             <String fx:value="cursor_hand" />
             <String fx:value="username_pass_button" />
@@ -46,5 +48,12 @@
             <String fx:value="cursor_hand" />
             <String fx:value="login_button" />
          </styleClass></Hyperlink>
+      <Button fx:id="AddProfilePic" layoutX="202.0" layoutY="368.0" mnemonicParsing="false" onAction="#OnAddProfilePicButtonClick" prefHeight="25.0" prefWidth="308.0" text="Add Profile Picture">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Button>
+      <Label fx:id="welcomeText" layoutX="263.0" layoutY="103.0" prefHeight="33.0" prefWidth="194.0" />
+      <Label fx:id="fileNamePic" layoutX="399.0" layoutY="393.0" prefHeight="17.0" prefWidth="111.0" />
    </children>
 </AnchorPane>

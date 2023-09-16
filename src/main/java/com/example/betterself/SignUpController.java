@@ -8,17 +8,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.TextInputDialog;
-
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Properties;
-import java.util.Random;
-
-import javax.mail.*;
-import javax.mail.internet.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.sql.*;
 
 public class SignUpController {
@@ -39,89 +36,78 @@ public class SignUpController {
     private PasswordField SignUpPassword;
     @FXML
     private PasswordField RptSignUpPassword;
+    private Image profilePic;
+    private File selectedFile;
+    @FXML
+    private Button AddProfilePic;
     @FXML
     private Hyperlink LogIn;
     @FXML
     private Hyperlink Help;
+    @FXML
+    private Label fileNamePic;
     public Connection con;
+    private int rowCount;
+    @FXML
+    protected void OnAddProfilePicButtonClick(ActionEvent event) throws IOException{
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+        selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            profilePic = new Image(selectedFile.toURI().toString());
+            fileNamePic.setText(selectedFile.toURI().toString());
+        }
+    }
     @FXML
     protected void onSignUpButtonClick(ActionEvent event) throws Exception {
-        Random random = new Random();
-        int verificationCode = 100000 + random.nextInt(900000);
-        final String senderEmail = "wasswalutufi@iut-dhaka.edu";
-        final String senderPassword = "424Poseidon.";
         String UserName = Name.getText();
-        String UserDOB = DateOfBirth.getPromptText();
+        LocalDate selectedDate = DateOfBirth.getValue();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String UserDOB = selectedDate.format(formatter);
         String recipientEmail=SignUpEmail.getText();
         String UserPassWord = SignUpPassword.getText();
         String ConfUserPass = RptSignUpPassword.getText();
-
-        Session session = Session.getInstance(
-                new Properties() {
-                    {
-                        setProperty("mail.smtp.host", "smtp.gmail.com");
-                        setProperty("mail.smtp.port", "587");
-                        setProperty("mail.smtp.user", senderEmail);
-                        setProperty("mail.smtp.password", senderPassword);
-                        setProperty("mail.smtp.auth", "true");
-                        setProperty("mail.smtp.starttls.enable", "true");
-                        //setProperty("mail.smtp.oauth2.clientId" = <your client ID>);
-                        //setProperty("mail.smtp.oauth2.clientSecret" = <your client secret>);
-                    }
-                });
-        MimeMessage message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(senderEmail));
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
-        message.setSubject("Verification Code From BetterSelf");
-        message.setText("Your verification code is: " + verificationCode);
-
-        Transport.send(message);
-        System.out.println("Verification code has been sent to "+ recipientEmail);
-
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Verification Code");
-        dialog.setHeaderText("Verification code has been sent to your email. Please enter the verification code: ");
-        dialog.setContentText("Verification Code:");
-
-        dialog.showAndWait().ifPresent(InputCode -> {
-            if (InputCode.equals(Integer.toString(verificationCode))) {
-                java.sql.Connection con= null;
-                try {
-                    Class.forName("oracle.jdbc.OracleDriver");
-                } catch (ClassNotFoundException e) {
-                    System.out.println("Error loading the driver" + e);
+        FileInputStream inputStream = new FileInputStream(selectedFile);
+        if( ConfUserPass.equals(UserPassWord)) {
+            java.sql.Connection con = null;
+            try {
+                Class.forName("oracle.jdbc.OracleDriver");
+            } catch (ClassNotFoundException e) {
+                System.out.println("Error loading the driver" + e);
+            }
+            try {
+                con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "user1156");
+                String sqlQuery = "SELECT COUNT(*) FROM BETTERUSER";
+                PreparedStatement preparedStatement = con.prepareStatement(sqlQuery);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    rowCount = resultSet.getInt(1);
                 }
-                try {
-                    con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "user1156");
-                    String sql="insert into BETTERUSER(NAME,DateOfBirth,EMAIL,PASSWORD) values(?,to_date(?,'mm/dd/yyyy'),?,?)";
-                    PreparedStatement statement=con.prepareStatement(sql);
-                    statement.setString(1,UserName);
-                    statement.setString(2,UserDOB);
-                    statement.setString(3,recipientEmail);
-                    statement.setString(4,UserPassWord);
-                    statement.executeUpdate();
-                    System.out.println("Inserted");
-                    con.close();
-                    showSuccessAlert("Verification Successful", "Your account has been verified! you can now login from the login page.");
-                    Name.clear();
-                    DateOfBirth.setValue(null);
-                    SignUpEmail.clear();
-                    SignUpPassword.clear();
-                    RptSignUpPassword.clear();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                showErrorAlert("Verification Failed", "Invalid verification code. Please try again later.");
-                //erase all the inputted fields
+                String sql = "insert into BETTERUSER(Id,Name,Email,DateOfBirth,Profile_Pic,Password,Total_Streaks,Total_Daily,Total_DeadLifts) values(?,?,?,to_date(?,'mm/dd/yyyy'),?,?,?,?,?)";
+                PreparedStatement statement = con.prepareStatement(sql);
+                statement.setInt(1, (rowCount+1));
+                statement.setString(2, UserName);
+                statement.setString(3, recipientEmail);
+                statement.setString(4, UserDOB);
+                statement.setBinaryStream(5, inputStream, (int) selectedFile.length());
+                statement.setString(6, UserPassWord);
+                statement.setInt(7, 0);
+                statement.setInt(8, 0);
+                statement.setInt(9, 0);
+                statement.executeUpdate();
+                System.out.println("Inserted");
+                con.close();
+                welcomeText.setText("Your account has been Created!, login from the login page.");
                 Name.clear();
                 DateOfBirth.setValue(null);
                 SignUpEmail.clear();
                 SignUpPassword.clear();
                 RptSignUpPassword.clear();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        });
-    }
+        }
+    };
     @FXML
     protected void onLogInLinkClick(ActionEvent event) throws IOException {
         root= FXMLLoader.load(getClass().getResource("hello-view.fxml"));
@@ -140,18 +126,4 @@ public class SignUpController {
         stage.setScene(scene);
         stage.show();
     }
-    private void showSuccessAlert(String title, String content) {
-        showAlert(AlertType.INFORMATION, title, content);
-    }
-    private void showErrorAlert(String title, String content) {
-        showAlert(AlertType.ERROR, title, content);
-    }
-    private void showAlert(AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
 }

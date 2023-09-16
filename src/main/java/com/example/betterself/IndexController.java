@@ -9,22 +9,23 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.ResourceBundle;
-
 public class IndexController implements Initializable{
+    public static UserData OurPerson;
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -39,7 +40,7 @@ public class IndexController implements Initializable{
     @FXML
     private VBox Timeline;
     @FXML
-    private VBox Setting;
+    private VBox Profile;
     @FXML
     private VBox About_Us;
     @FXML
@@ -68,6 +69,13 @@ public class IndexController implements Initializable{
     ListView<HBox> TodoList;
     @FXML
     private Label StreakLabel;
+
+
+    @FXML
+    private ImageView ProfilePic;
+
+
+
     @FXML
     private PieChart ActivityChart;
     @FXML
@@ -75,8 +83,16 @@ public class IndexController implements Initializable{
     XYChart.Series<Number, Number> series1;
     private int DailyDone=0,DailyIncomplete=0,TimeBoundCount=0,StreakCount=0;
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        //load all items from the database.
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
+        //load all required items from the database for the user
+        ProfilePic.setImage(new Image(new ByteArrayInputStream(OurPerson.Profile_Pic)));
+        //Update program variables
+        //setup the profile page
+        //setup the leaderBoard
+        //setup the timeline
+        //setup my team page
+        //setup the charts
         DeadlineChart = new LineChart<>(new NumberAxis(), new NumberAxis());
         DeadlineChart.setCreateSymbols(true);
         series1 = new XYChart.Series<>();
@@ -199,7 +215,7 @@ public class IndexController implements Initializable{
         My_Team.setVisible(false);
         Leaderboard.setVisible(false);
         Timeline.setVisible(false);
-        Setting.setVisible(false);
+        Profile.setVisible(false);
         About_Us.setVisible(false);
     }
     @FXML
@@ -209,7 +225,7 @@ public class IndexController implements Initializable{
         My_Team.setVisible(false);
         Leaderboard.setVisible(false);
         Timeline.setVisible(false);
-        Setting.setVisible(false);
+        Profile.setVisible(false);
         About_Us.setVisible(false);
     }
     @FXML
@@ -219,7 +235,7 @@ public class IndexController implements Initializable{
         My_Team.setVisible(true);
         Leaderboard.setVisible(false);
         Timeline.setVisible(false);
-        Setting.setVisible(false);
+        Profile.setVisible(false);
         About_Us.setVisible(false);
     }
     @FXML
@@ -229,7 +245,7 @@ public class IndexController implements Initializable{
         My_Team.setVisible(false);
         Leaderboard.setVisible(true);
         Timeline.setVisible(false);
-        Setting.setVisible(false);
+        Profile.setVisible(false);
         About_Us.setVisible(false);
     }
     @FXML
@@ -239,7 +255,7 @@ public class IndexController implements Initializable{
         My_Team.setVisible(false);
         Leaderboard.setVisible(false);
         Timeline.setVisible(true);
-        Setting.setVisible(false);
+        Profile.setVisible(false);
         About_Us.setVisible(false);
     }
     @FXML
@@ -249,7 +265,7 @@ public class IndexController implements Initializable{
         My_Team.setVisible(false);
         Leaderboard.setVisible(false);
         Timeline.setVisible(false);
-        Setting.setVisible(true);
+        Profile.setVisible(true);
         About_Us.setVisible(false);
     }
     @FXML
@@ -259,11 +275,11 @@ public class IndexController implements Initializable{
         My_Team.setVisible(false);
         Leaderboard.setVisible(false);
         Timeline.setVisible(false);
-        Setting.setVisible(false);
+        Profile.setVisible(false);
         About_Us.setVisible(true);
     }
     @FXML
-    protected void onHelpButtonClick (ActionEvent event) throws IOException {
+    protected void onHelpButtonClick(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("Help-view.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root, 752, 641);
@@ -272,7 +288,7 @@ public class IndexController implements Initializable{
         stage.show();
     }
     @FXML
-    protected void onLogOutClick (ActionEvent event) throws IOException {
+    protected void onLogOutClick(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("hello-view.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root, 752, 641);
