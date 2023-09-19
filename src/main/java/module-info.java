@@ -11,6 +11,7 @@ module com.example.betterself {
     requires eu.hansolo.tilesfx;
     requires javax.mail;
     requires java.sql;
+    requires ojdbc14;
 
     opens com.example.betterself to javafx.fxml;
     exports com.example.betterself;

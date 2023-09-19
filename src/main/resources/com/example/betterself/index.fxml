@@ -9,7 +9,6 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.image.Image?>
@@ -26,7 +25,7 @@
 
 <AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="784.0" minWidth="1357.0" prefHeight="784.0" prefWidth="1357.0" styleClass="backGround" stylesheets="@Index.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.betterself.IndexController">
    <children>
-      <HBox layoutY="7.0" opacity="0.28" prefHeight="122.0" prefWidth="1357.0">
+      <HBox layoutY="7.0" opacity="0.28" prefHeight="122.0" prefWidth="1357.0" styleClass="ribbon" stylesheets="@Index.css">
          <effect>
             <Shadow height="82.07" radius="35.405" width="61.55">
                <color>
@@ -44,7 +43,7 @@
                </image></ImageView>
          </children>
       </StackPane>
-      <VBox layoutX="985.0" layoutY="129.0" prefHeight="564.0" prefWidth="340.0">
+      <VBox layoutX="985.0" layoutY="129.0" prefHeight="375.0" prefWidth="340.0">
          <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
@@ -53,7 +52,7 @@
                         <Font name="Arial Narrow Italic" size="21.0" />
                      </font>
                   </Label>
-                  <Label fx:id="StreakLabel" layoutX="103.0" layoutY="44.0" prefHeight="102.0" prefWidth="122.0">
+                  <Label fx:id="StreakLabel" layoutX="89.0" layoutY="41.0" prefHeight="139.0" prefWidth="162.0">
                      <font>
                         <Font size="36.0" />
                      </font>
@@ -61,14 +60,6 @@
                </children>
             </AnchorPane>
             <PieChart fx:id="ActivityChart" prefHeight="172.0" prefWidth="340.0" />
-            <LineChart fx:id="DeadlineChart" prefHeight="271.0" prefWidth="340.0">
-              <xAxis>
-                <CategoryAxis side="BOTTOM" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis side="LEFT" />
-              </yAxis>
-            </LineChart>
          </children></VBox>
       <GridPane alignment="CENTER" layoutX="48.0" layoutY="125.0" prefHeight="384.0" prefWidth="163.0" styleClass="side_Nav" stylesheets="@Index.css">
         <columnConstraints>
@@ -80,65 +71,30 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Button fx:id="DashboardButton" mnemonicParsing="false" onAction="#OnDashboardButtonClick" prefHeight="81.0" prefWidth="287.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="Dashboard">
                <font>
                   <Font size="16.0" />
                </font></Button>
-            <Button fx:id="My_ProgressButton" mnemonicParsing="false" onAction="#My_ProgressButtonClick" prefHeight="70.0" prefWidth="270.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="My Progress" GridPane.rowIndex="1">
+            <Button fx:id="TimelineButton" mnemonicParsing="false" onAction="#TimelineButtonClick" prefHeight="64.0" prefWidth="242.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="My Timeline" GridPane.rowIndex="3">
                <font>
                   <Font size="16.0" />
                </font></Button>
-            <Button fx:id="TimelineButton" mnemonicParsing="false" onAction="#TimelineButtonClick" prefHeight="64.0" prefWidth="242.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="My Timeline" GridPane.rowIndex="4">
+            <Button fx:id="My_TeamButton" mnemonicParsing="false" onAction="#My_TeamButtonClick" prefHeight="58.0" prefWidth="256.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="My Team" GridPane.rowIndex="1">
                <font>
                   <Font size="16.0" />
                </font></Button>
-            <Button fx:id="My_TeamButton" mnemonicParsing="false" onAction="#My_TeamButtonClick" prefHeight="58.0" prefWidth="256.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="My Team" GridPane.rowIndex="2">
+            <Button fx:id="LeaderboardButton" mnemonicParsing="false" onAction="#LeaderboardButtonClick" prefHeight="54.0" prefWidth="256.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="Leaderboard" GridPane.rowIndex="2">
                <font>
                   <Font size="16.0" />
                </font></Button>
-            <Button fx:id="LeaderboardButton" mnemonicParsing="false" onAction="#LeaderboardButtonClick" prefHeight="54.0" prefWidth="256.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="Leaderboard" GridPane.rowIndex="3">
-               <font>
-                  <Font size="16.0" />
-               </font></Button>
-            <Button fx:id="SettingButton" mnemonicParsing="false" onAction="#SettingButtonClick" prefHeight="55.0" prefWidth="250.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="Profile" GridPane.rowIndex="5">
-               <font>
-                  <Font size="16.0" />
-               </font></Button>
-            <Button fx:id="About_UsButton" mnemonicParsing="false" onAction="#About_UsButtonClick" prefHeight="98.0" prefWidth="214.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="About Us" GridPane.rowIndex="6">
+            <Button fx:id="SettingButton" mnemonicParsing="false" onAction="#SettingButtonClick" prefHeight="55.0" prefWidth="250.0" styleClass="side_Nav_Button" stylesheets="@Index.css" text="Profile" GridPane.rowIndex="4">
                <font>
                   <Font size="16.0" />
                </font></Button>
          </children>
       </GridPane>
-      <VBox fx:id="About_Us" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" visible="false">
-         <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <ImageView fitHeight="150.0" fitWidth="152.0" opacity="0.9" pickOnBounds="true">
-                     <image>
-                        <Image url="@lutufi.jpg" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="410.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fitHeight="149.0" fitWidth="162.0" opacity="0.9" pickOnBounds="true">
-                     <image>
-                        <Image url="@soikey.jpg" />
-                     </image>
-                  </ImageView>
-               </children>
-            </HBox>
-            <Label prefHeight="540.0" prefWidth="724.0" text="." textAlignment="CENTER" wrapText="true">
-               <font>
-                  <Font name="Georgia Bold" size="88.0" />
-               </font>
-            </Label>
-         </children>
-      </VBox>
       <VBox fx:id="Profile" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" visible="false">
          <children>
             <AnchorPane prefHeight="693.0" prefWidth="713.0">
@@ -146,60 +102,59 @@
                   <Label layoutX="47.0" layoutY="153.0" prefHeight="17.0" prefWidth="87.0" text="Name " />
                   <Label layoutX="47.0" layoutY="244.0" text="Teams" />
                   <Label layoutX="51.0" layoutY="415.0" text="Total Streaks" />
-                  <Label layoutX="51.0" layoutY="445.0" text="Total Tasks" />
-                  <Label layoutX="51.0" layoutY="483.0" text="Total Habbits" />
-                  <Label layoutX="47.0" layoutY="186.0" text="Email" />
+                  <Label layoutX="51.0" layoutY="445.0" text="Total Daily Tasks" />
+                  <Label layoutX="51.0" layoutY="483.0" text="One-Time Tasks" />
+                  <Label layoutX="47.0" layoutY="186.0" prefHeight="17.0" prefWidth="68.0" text="Email" />
                   <Label layoutX="51.0" layoutY="516.0" text="OverAll Position" />
-                  <ImageView fitHeight="122.0" fitWidth="122.0" layoutX="317.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="ProfilePic" fitHeight="122.0" fitWidth="122.0" layoutX="317.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" />
                   <ListView layoutX="143.0" layoutY="254.0" prefHeight="139.0" prefWidth="393.0" />
-                  <Label layoutX="167.0" layoutY="153.0" prefHeight="17.0" prefWidth="436.0" />
-                  <Label layoutX="169.0" layoutY="187.0" prefHeight="17.0" prefWidth="436.0" />
+                  <Label fx:id="PName" layoutX="161.0" layoutY="153.0" prefHeight="17.0" prefWidth="436.0" />
+                  <Label fx:id="PEmail" layoutX="169.0" layoutY="187.0" prefHeight="17.0" prefWidth="436.0" />
                   <Label layoutX="143.0" layoutY="233.0" prefHeight="17.0" prefWidth="107.0" text="Your Teams" />
-                  <Label layoutX="161.0" layoutY="415.0" prefHeight="17.0" prefWidth="275.0" />
-                  <Label layoutX="159.0" layoutY="445.0" prefHeight="17.0" prefWidth="275.0" />
-                  <Label layoutX="159.0" layoutY="486.0" prefHeight="17.0" prefWidth="275.0" />
-                  <Label layoutX="164.0" layoutY="516.0" prefHeight="17.0" prefWidth="275.0" />
+                  <Label fx:id="PStreaks" layoutX="174.0" layoutY="415.0" prefHeight="17.0" prefWidth="275.0" />
+                  <Label fx:id="PDaily" layoutX="175.0" layoutY="445.0" prefHeight="17.0" prefWidth="275.0" />
+                  <Label fx:id="PCompl" layoutX="172.0" layoutY="484.0" prefHeight="17.0" prefWidth="275.0" />
+                  <Label fx:id="PPosition" layoutX="164.0" layoutY="516.0" prefHeight="17.0" prefWidth="275.0" />
                </children></AnchorPane>
          </children>
       </VBox>
       <VBox fx:id="Timeline" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" visible="false">
          <children>
-            <Label prefHeight="352.0" prefWidth="436.0" text="History">
-               <font>
-                  <Font size="43.0" />
-               </font>
-            </Label>
+            <LineChart prefHeight="670.0" prefWidth="713.0">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </LineChart>
          </children>
       </VBox>
-      <VBox fx:id="Leaderboard" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" visible="false">
+      <VBox fx:id="Leaderboard" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0">
          <children>
-            <Label prefHeight="308.0" prefWidth="346.0" text="Leaderboard">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </Label>
-         </children>
-      </VBox>
-      <VBox fx:id="My_Team" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" visible="false">
-         <children>
-            <Label prefHeight="239.0" prefWidth="244.0" text="My Team">
-               <font>
-                  <Font size="43.0" />
-               </font>
-            </Label>
-         </children>
-      </VBox>
-      <VBox fx:id="My_Progress" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" visible="false">
-         <children>
-            <AnchorPane prefHeight="674.0" prefWidth="713.0">
+            <AnchorPane prefHeight="668.0" prefWidth="713.0">
                <children>
-                  <ScrollPane layoutX="70.0" layoutY="68.0" prefHeight="206.0" prefWidth="582.0" />
-                  <Label layoutX="70.0" layoutY="40.0" prefHeight="25.0" prefWidth="182.0" text="Streak" />
-                  <Label layoutX="79.0" layoutY="326.0" prefHeight="25.0" prefWidth="122.0" text="Graph" />
-                  <ScrollPane layoutX="75.0" layoutY="355.0" prefHeight="239.0" prefWidth="582.0" />
+                  <ListView fx:id="TopGuys" layoutX="37.0" layoutY="98.0" prefHeight="526.0" prefWidth="641.0" />
+                  <Label layoutX="295.0" layoutY="32.0" prefHeight="25.0" prefWidth="149.0" text="The Top Guys">
+                     <font>
+                        <Font name="Bernard MT Condensed" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="53.0" layoutY="73.0" prefHeight="25.0" prefWidth="115.0" text="Name">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="306.0" layoutY="77.0" prefHeight="17.0" prefWidth="85.0" text="Total Points">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
-         </children></VBox>
+         </children>
+      </VBox>
+      <VBox fx:id="My_Team" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" visible="false" />
       <VBox fx:id="Dashboard" layoutX="221.0" layoutY="125.0" prefHeight="656.0" prefWidth="713.0" styleClass="task_list" stylesheets="@Index.css" visible="false">
          <children>
             <HBox prefHeight="67.0" prefWidth="918.0">

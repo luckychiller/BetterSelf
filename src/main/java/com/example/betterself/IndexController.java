@@ -1,5 +1,7 @@
 package com.example.betterself;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,46 +19,56 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+
+import java.io.*;
 import java.net.URL;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
+import java.util.jar.Attributes;
+
 public class IndexController implements Initializable{
     public static UserData OurPerson;
     private Stage stage;
     private Scene scene;
     private Parent root;
+
     @FXML
-    private VBox Dashboard;
+    private Label StreakLabel;
     @FXML
-    private VBox My_Progress;
-    @FXML
-    private VBox My_Team;
-    @FXML
-    private VBox Leaderboard;
-    @FXML
-    private VBox Timeline;
+    private PieChart ActivityChart;
+    private int DailyDone=0,DailyIncomplete=0,TimeBoundCount=0,StreakCount=0;
+
+
     @FXML
     private VBox Profile;
     @FXML
-    private VBox About_Us;
+    private Button SettingButton;//profile button
+    @FXML
+    private ImageView ProfilePic;
+    @FXML
+    private Label PName;
+    @FXML
+    private Label PEmail;
+    @FXML
+    private Label PStreaks;
+    @FXML
+    private Label PDaily;
+    @FXML
+    private Label PCompl;
+    @FXML
+    private Label PPosition;
+
+
+    @FXML
+    private VBox Dashboard;
     @FXML
     private Button DashboardButton;
-    @FXML
-    private Button My_ProgressButton;
-    @FXML
-    private Button My_TeamButton;
-    @FXML
-    private Button LeaderboardButton;
-    @FXML
-    private Button TimelineButton;
-    @FXML
-    private Button SettingButton;
-    @FXML
-    private Button About_UsButton;
     @FXML
     private Button AddItem;
     @FXML
@@ -67,43 +79,140 @@ public class IndexController implements Initializable{
     private ComboBox<String> AddTaskType;
     @FXML
     ListView<HBox> TodoList;
-    @FXML
-    private Label StreakLabel;
-
 
     @FXML
-    private ImageView ProfilePic;
-
-
+    private VBox My_Team;
+    @FXML
+    private Button My_TeamButton;
 
     @FXML
-    private PieChart ActivityChart;
+    private VBox Leaderboard;
     @FXML
-    private LineChart<Number,Number> DeadlineChart;
+    private Button LeaderboardButton;
+    @FXML
+    ListView<HBox> TopGuys = new ListView<>();
+    ObservableList<HBox> items = FXCollections.observableArrayList();
+
+    @FXML
+    private VBox Timeline;
+    @FXML
+    private Button TimelineButton;
+    @FXML
+    private LineChart<Number,Number> timelineChart;
     XYChart.Series<Number, Number> series1;
-    private int DailyDone=0,DailyIncomplete=0,TimeBoundCount=0,StreakCount=0;
+    private int x,y,z;
+
+
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
+        /////////////////////////////////////////////////////////////////////////////////
         //load all required items from the database for the user
-        ProfilePic.setImage(new Image(new ByteArrayInputStream(OurPerson.Profile_Pic)));
-        //Update program variables
-        //setup the profile page
-        //setup the leaderBoard
-        //setup the timeline
-        //setup my team page
-        //setup the charts
-        DeadlineChart = new LineChart<>(new NumberAxis(), new NumberAxis());
-        DeadlineChart.setCreateSymbols(true);
-        series1 = new XYChart.Series<>();
-        series1.setName("Finish Within");
-        DeadlineChart.getData().add(series1);
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("Intel.ser"))) {
+            OurPerson = (UserData) ois.readObject();
+            System.out.println("Object has been read from the file:");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        /////////////////////////////////////////////////////////////////////////
+
+        //setup the dashboard
         TodoList.refresh();
         TodoList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         AddTaskType.getItems().addAll("Make It Habbit", "Finish Within", "Daily Duty");
+
+        ////////////////////////////////////////////////////////////////
+
+        //setup my team page
+
+
+        ///////////////////////////////////////////////////////////////////////
+
+        //setup the leaderBoard
+        TopGuys.setItems(items);
+        java.sql.Connection con = null;
+        try {
+            Class.forName("oracle.jdbc.OracleDriver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Error loading the driver" + e);
+        }
+        try {
+            con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "user1156");
+            String sql="SELECT * FROM BETTERUSER ORDER BY POINTS DESC";
+            PreparedStatement statement=con.prepareStatement(sql);
+            System.out.println(6);
+            ResultSet rs_ = statement.executeQuery();
+            while (rs_.next()) {
+                Label name = new Label(rs_.getString("NAME"));
+                Label points = new Label(String.valueOf(rs_.getInt("Points")));
+                name.setPrefWidth(300);
+                if(name.getText().equals(OurPerson.Name))
+                {
+                    name.setTextFill(Color.BLUE);
+                    points.setTextFill(Color.BLUE);
+                }
+                else
+                {
+                    name.setTextFill(Color.GREEN);
+                    points.setTextFill(Color.GREEN);
+                }
+                name.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+                points.setPrefWidth(50);
+                points.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+                HBox hBox = new HBox();
+                hBox.getChildren().add(name);
+                hBox.getChildren().add(points);
+                TopGuys.getItems().add(hBox);
+            }
+            con.close();
+            System.out.println(77);
+        } catch (SQLException e) {
+            System.out.println(1);
+            throw new RuntimeException(e);
+        }
+
+
+        ////////////////////////////////////////////////////////////////
+
+
+        //setup the timeline
+        timelineChart = new LineChart<>(new NumberAxis(), new NumberAxis());
+        timelineChart.setCreateSymbols(true);
+        series1 = new XYChart.Series<>();
+        series1.setName("Finish Within");
+        timelineChart.getData().add(series1);
+
+
+        //////////////////////////////////////////////////////////////////////
+
+
+        //setup the profile page
+        ProfilePic.setImage(new Image(new ByteArrayInputStream(OurPerson.Profile_Pic)));
+        PName.setText(OurPerson.Name);
+        PEmail.setText(OurPerson.Email);
+        PStreaks.setText(String.valueOf(OurPerson.Total_Streaks));
+        PDaily.setText(String.valueOf(OurPerson.Total_Daily));
+        PCompl.setText(String.valueOf(OurPerson.Total_DeadLifts));
+        PPosition.setText(String.valueOf(OurPerson.Points));
+
+        //Update program variables
+        //DailyDone=0,DailyIncomplete=0,TimeBoundCount=0,StreakCount=0,x=y=z=0
+
+
+        //////////////////////////////////////////////////////////////////////
+
+
+        //setup the charts
         PieChart.Data slice1 = new PieChart.Data("Complete", DailyDone);
         PieChart.Data slice2 = new PieChart.Data("Incomplete", DailyIncomplete);
         ActivityChart.getData().addAll(slice1, slice2);
+
+
+
+
     }
     private void UpdateActivityChart(String TaskType,int Incrim,long days_left){
         if(TaskType.equals("Make It Habbit")) {
@@ -113,9 +222,6 @@ public class IndexController implements Initializable{
         else {
             if (TaskType.equals("Finish Within")) {
                 TimeBoundCount++;
-                XYChart.Data<Number, Number> dataPoint = new XYChart.Data<>(days_left, (Math.random())%5);
-                series1.getData().add(dataPoint);
-                DeadlineChart.layout();
                 //Add item and deadline to graph.
             }
             else {
@@ -211,72 +317,42 @@ public class IndexController implements Initializable{
     @FXML
     private void OnDashboardButtonClick(ActionEvent event) throws IOException{
         Dashboard.setVisible(true);
-        My_Progress.setVisible(false);
         My_Team.setVisible(false);
         Leaderboard.setVisible(false);
         Timeline.setVisible(false);
         Profile.setVisible(false);
-        About_Us.setVisible(false);
-    }
-    @FXML
-    private void My_ProgressButtonClick(ActionEvent event) throws IOException{
-        Dashboard.setVisible(false);
-        My_Progress.setVisible(true);
-        My_Team.setVisible(false);
-        Leaderboard.setVisible(false);
-        Timeline.setVisible(false);
-        Profile.setVisible(false);
-        About_Us.setVisible(false);
     }
     @FXML
     private void My_TeamButtonClick(ActionEvent event) throws IOException{
         Dashboard.setVisible(false);
-        My_Progress.setVisible(false);
         My_Team.setVisible(true);
         Leaderboard.setVisible(false);
         Timeline.setVisible(false);
         Profile.setVisible(false);
-        About_Us.setVisible(false);
     }
     @FXML
     private void LeaderboardButtonClick(ActionEvent event) throws IOException{
         Dashboard.setVisible(false);
-        My_Progress.setVisible(false);
         My_Team.setVisible(false);
         Leaderboard.setVisible(true);
         Timeline.setVisible(false);
         Profile.setVisible(false);
-        About_Us.setVisible(false);
     }
     @FXML
     private void TimelineButtonClick(ActionEvent event) throws IOException{
         Dashboard.setVisible(false);
-        My_Progress.setVisible(false);
         My_Team.setVisible(false);
         Leaderboard.setVisible(false);
         Timeline.setVisible(true);
         Profile.setVisible(false);
-        About_Us.setVisible(false);
     }
     @FXML
     private void SettingButtonClick(ActionEvent event) throws IOException{
         Dashboard.setVisible(false);
-        My_Progress.setVisible(false);
         My_Team.setVisible(false);
         Leaderboard.setVisible(false);
         Timeline.setVisible(false);
         Profile.setVisible(true);
-        About_Us.setVisible(false);
-    }
-    @FXML
-    private void About_UsButtonClick(ActionEvent event) throws IOException{
-        Dashboard.setVisible(false);
-        My_Progress.setVisible(false);
-        My_Team.setVisible(false);
-        Leaderboard.setVisible(false);
-        Timeline.setVisible(false);
-        Profile.setVisible(false);
-        About_Us.setVisible(true);
     }
     @FXML
     protected void onHelpButtonClick(ActionEvent event) throws IOException {

@@ -8,9 +8,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Objects;
+import java.io.ObjectOutputStream;
 import java.sql.*;
 
 public class HelloController {
@@ -35,8 +35,7 @@ public class HelloController {
     protected void onLogInButtonClick(ActionEvent event) throws IOException {
         String email = LoginEmail.getText();
         String password = LoginPassword.getText();
-
-        java.sql.Connection con= null;
+        java.sql.Connection con = null;
         try {
             Class.forName("oracle.jdbc.OracleDriver");
         } catch (ClassNotFoundException e) {
@@ -50,17 +49,24 @@ public class HelloController {
             statement.setString(2,password);
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
+                UserData OurPerson=new UserData();
+                OurPerson.UserId=rs.getInt("Id");
+                OurPerson.Name=rs.getString("Name");
+                OurPerson.Email=rs.getString("Email");
+                OurPerson.DateOfBirth=rs.getDate("DateOfBirth");
+                OurPerson.Profile_Pic=rs.getBytes("Profile_Pic");
+                OurPerson.Password=rs.getString("Password");
+                OurPerson.Total_Streaks=rs.getInt("Total_Streaks");
+                OurPerson.Total_Daily=rs.getInt("Total_Daily");
+                OurPerson.Total_DeadLifts=rs.getInt("Total_Deadlifts");
+                OurPerson.Points=rs.getInt("Points");
+                try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Intel.ser"))) {
+                    oos.writeObject(OurPerson);
+                    System.out.println("Object has been written to the file.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 con.close();
-                IndexController.OurPerson=new UserData(
-                        rs.getInt("Id"),
-                        rs.getString("Name"),
-                        rs.getString("Email"),
-                        rs.getDate("DateOfBirth"),
-                        rs.getBytes("Profile_Pic"),
-                        rs.getString("Password"),
-                        rs.getInt("Total_Streaks"),
-                        rs.getInt("Total_Daily"),
-                        rs.getInt("Total_Deadlifts"));
                 root = FXMLLoader.load(getClass().getResource("index.fxml"));
                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 scene = new Scene(root, 752, 641);

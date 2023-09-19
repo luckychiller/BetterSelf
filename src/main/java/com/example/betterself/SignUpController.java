@@ -62,7 +62,7 @@ public class SignUpController {
     protected void onSignUpButtonClick(ActionEvent event) throws Exception {
         String UserName = Name.getText();
         LocalDate selectedDate = DateOfBirth.getValue();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         String UserDOB = selectedDate.format(formatter);
         String recipientEmail=SignUpEmail.getText();
         String UserPassWord = SignUpPassword.getText();
@@ -83,7 +83,7 @@ public class SignUpController {
                 if (resultSet.next()) {
                     rowCount = resultSet.getInt(1);
                 }
-                String sql = "insert into BETTERUSER(Id,Name,Email,DateOfBirth,Profile_Pic,Password,Total_Streaks,Total_Daily,Total_DeadLifts) values(?,?,?,to_date(?,'mm/dd/yyyy'),?,?,?,?,?)";
+                String sql = "insert into BETTERUSER(Id,Name,Email,DateOfBirth,Profile_Pic,Password,Total_Streaks,Total_Daily,Total_DeadLifts,Points) values(?,?,?,to_date(?,'mm/dd/yyyy'),?,?,?,?,?,?)";
                 PreparedStatement statement = con.prepareStatement(sql);
                 statement.setInt(1, (rowCount+1));
                 statement.setString(2, UserName);
@@ -94,6 +94,7 @@ public class SignUpController {
                 statement.setInt(7, 0);
                 statement.setInt(8, 0);
                 statement.setInt(9, 0);
+                statement.setInt(10, 0);
                 statement.executeUpdate();
                 System.out.println("Inserted");
                 con.close();
