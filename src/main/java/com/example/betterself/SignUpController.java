@@ -77,7 +77,7 @@ public class SignUpController {
             }
             try {
                 con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "user1156");
-                String sqlQuery = "SELECT COUNT(*) FROM BETTERUSER";
+                String sqlQuery = "SELECT MAX(ID) FROM BETTERUSER";
                 PreparedStatement preparedStatement = con.prepareStatement(sqlQuery);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {

@@ -42,7 +42,7 @@ public class IndexController implements Initializable{
     private Label StreakLabel;
     @FXML
     private PieChart ActivityChart;
-    private int DailyDone=0,DailyIncomplete=0,TimeBoundCount=0,StreakCount=0;
+    private int DailyDone=0,DailyIncomplete=0,TimeBoundCount=0,StreakCount=0,rowCount;;
 
 
     @FXML
@@ -214,7 +214,9 @@ public class IndexController implements Initializable{
 
 
     }
-    private void UpdateActivityChart(String TaskType,int Incrim,long days_left){
+    private void UpdateActivityChart(String TaskType,int Incrim,long days_left,String TaskName){
+        //include it to the timeline
+
         if(TaskType.equals("Make It Habbit")) {
             StreakCount+=Incrim;
             StreakLabel.setText(String.valueOf(StreakCount));
@@ -283,10 +285,46 @@ public class IndexController implements Initializable{
 
         closeString.setOnAction(e -> {
             HBox hbox1 = (HBox) closeString.getParent();
-            Label qwerty = (Label) hbox1.getChildren().get(2);
+            Label QNm = (Label) hbox1.getChildren().get(1);
+            Label QDt = (Label) hbox1.getChildren().get(2);
+            Label QTy = (Label) hbox1.getChildren().get(3);
+            Label QId = (Label) hbox1.getChildren().get(4);
+
+            java.sql.Connection con = null;
+            try {
+                Class.forName("oracle.jdbc.OracleDriver");
+            } catch (ClassNotFoundException eX) {
+                System.out.println("Error loading the driver" + eX);
+            }
+            try {
+                con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "user1156");
+                String sql = "insert into HISTORY (USER_Id,TASK_ID,TASK_NAME,TASK_DATE,TASK_TYPE) values(?,?,?,to_date(?,'mm/dd/yyyy'),?)";
+                PreparedStatement statement = con.prepareStatement(sql);
+
+                statement.setInt(1, OurPerson.UserId);
+                statement.setInt(2, Integer.parseInt((QId.getText())));
+                statement.setString(3, QNm.getText());
+                statement.setString(4, QDt.getText());
+                statement.setString(5, QTy.getText());
+                statement.executeUpdate();
+                System.out.println("Inserted into history");
+
+                String sqlQuery2 = "DELETE FROM TASK WHERE USER_Id=? AND TASK_ID=? AND TASK_NAME=? AND TASK_DATE=? AND TASK_TYPE=?";
+                PreparedStatement Statement2 = con.prepareStatement(sqlQuery2);
+                statement.setInt(1, OurPerson.UserId);
+                statement.setInt(2, Integer.parseInt((QId.getText())));
+                statement.setString(3, QNm.getText());
+                statement.setString(4, "to_date("+QDt.getText()+",'mm/dd/yyyy')");
+                statement.setString(5, QTy.getText());
+                statement.executeUpdate();
+                System.out.println("removed from task table");
+                con.close();
+            } catch (SQLException eXX) {
+                throw new RuntimeException(eXX);
+            }
             TodoList.getItems().remove(hbox1);
-            String ttext = qwerty.getText();
-            UpdateActivityChart(ttext,-1,daysBetween);
+            System.out.println("item removed");
+            UpdateActivityChart(QTy.getText(),-1,daysBetween,QNm.getText());
         });
 
         Label taskLabel = new Label(aa);
@@ -309,10 +347,38 @@ public class IndexController implements Initializable{
         hbox.getChildren().add(taskLabel);
         hbox.getChildren().add(dateLabel);
         hbox.getChildren().add(taskType);
+        hbox.getChildren().add(new Label(String.valueOf(rowCount+1)));
         hbox.getChildren().add(closeString);
 
         TodoList.getItems().add(hbox);
-        UpdateActivityChart(_TaskType,1,daysBetween);
+        java.sql.Connection con = null;
+        try {
+            Class.forName("oracle.jdbc.OracleDriver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Error loading the driver" + e);
+        }
+        try {
+            con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "user1156");
+            String sqlQuery = "SELECT MAX(TASK_ID) FROM TASK";
+            PreparedStatement preparedStatement = con.prepareStatement(sqlQuery);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                rowCount = resultSet.getInt(1);
+            }
+            String sql = "insert into TASK(USER_Id,TASK_ID,TASK_NAME,TASK_DATE,TASK_TYPE) values(?,?,?,to_date(?,'mm/dd/yyyy'),?)";
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, OurPerson.UserId);
+            statement.setInt(2, (rowCount+1));
+            statement.setString(3, aa);
+            statement.setString(4, selectedDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+            statement.setString(5, _TaskType);
+            statement.executeUpdate();
+            System.out.println("Inserted");
+            con.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        UpdateActivityChart(_TaskType,1,daysBetween,aa);
     }
     @FXML
     private void OnDashboardButtonClick(ActionEvent event) throws IOException{

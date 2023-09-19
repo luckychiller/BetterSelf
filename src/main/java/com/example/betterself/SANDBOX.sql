@@ -31,6 +31,10 @@ CREATE TABLE HISTORY(
     FOREIGN KEY (User_Id) references BETTERUSER(Id)
 )
 
+    LocalDate selectedDate = AddTaskDate.getValue();
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        String UserDOB = selectedDate.format(formatter);
+
 CREATE TABLE TASK(
       User_Id int,
       Task_Id int,
