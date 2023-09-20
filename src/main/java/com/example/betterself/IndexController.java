@@ -30,7 +30,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
-import java.util.jar.Attributes;
 
 public class IndexController implements Initializable{
     public static UserData OurPerson;
@@ -42,7 +41,7 @@ public class IndexController implements Initializable{
     private Label StreakLabel;
     @FXML
     private PieChart ActivityChart;
-    private int DailyDone=0,DailyIncomplete=0,TimeBoundCount=0,StreakCount=0,rowCount;;
+    private int DailyDone=0,DailyIncomplete=0,TimeBoundCount=0,StreakCount=0,rowCount;
 
 
     @FXML
@@ -119,19 +118,20 @@ public class IndexController implements Initializable{
 
         /////////////////////////////////////////////////////////////////////////
 
-        //setup the dashboard
+        //set up the dashboard
         TodoList.refresh();
         TodoList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         AddTaskType.getItems().addAll("Make It Habbit", "Finish Within", "Daily Duty");
+        //Add items from the database
 
         ////////////////////////////////////////////////////////////////
 
-        //setup my team page
+        //set up my team page
 
 
         ///////////////////////////////////////////////////////////////////////
 
-        //setup the leaderBoard
+        //set up the leaderBoard
         TopGuys.setItems(items);
         java.sql.Connection con = null;
         try {
@@ -178,18 +178,19 @@ public class IndexController implements Initializable{
         ////////////////////////////////////////////////////////////////
 
 
-        //setup the timeline
+        //set up the timeline
         timelineChart = new LineChart<>(new NumberAxis(), new NumberAxis());
         timelineChart.setCreateSymbols(true);
         series1 = new XYChart.Series<>();
-        series1.setName("Finish Within");
+        series1.setName("Past Activity");
         timelineChart.getData().add(series1);
+        //add items from the history table
 
 
         //////////////////////////////////////////////////////////////////////
 
 
-        //setup the profile page
+        //set up the profile page
         ProfilePic.setImage(new Image(new ByteArrayInputStream(OurPerson.Profile_Pic)));
         PName.setText(OurPerson.Name);
         PEmail.setText(OurPerson.Email);
@@ -198,21 +199,23 @@ public class IndexController implements Initializable{
         PCompl.setText(String.valueOf(OurPerson.Total_DeadLifts));
         PPosition.setText(String.valueOf(OurPerson.Points));
 
-        //Update program variables
-        //DailyDone=0,DailyIncomplete=0,TimeBoundCount=0,StreakCount=0,x=y=z=0
+        ///////////////////////////////////////////////////////////////
 
+        //Update program variables
+        DailyDone=0;
+        DailyIncomplete=0;// count from task table;
+        TimeBoundCount=0; //count from task table;
+        StreakCount=0;// count from task table;
 
         //////////////////////////////////////////////////////////////////////
+        //update the streaks label
+        StreakLabel.setText(String.valueOf(StreakCount));
 
-
-        //setup the charts
+        ///////////////////////////////////////////////////////////////
+        //set up the pie charts
         PieChart.Data slice1 = new PieChart.Data("Complete", DailyDone);
         PieChart.Data slice2 = new PieChart.Data("Incomplete", DailyIncomplete);
         ActivityChart.getData().addAll(slice1, slice2);
-
-
-
-
     }
     private void UpdateActivityChart(String TaskType,int Incrim,long days_left,String TaskName){
         //include it to the timeline
@@ -283,6 +286,25 @@ public class IndexController implements Initializable{
         AddTaskName.clear();
         AddTaskDate.setValue(null);
 
+        Label taskLabel = new Label(aa);
+        taskLabel.setPrefWidth(250);
+        taskLabel.setTextFill(Color.RED);
+        taskLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+
+        Label taskType = new Label(_TaskType);
+        taskLabel.setPrefWidth(200);
+        taskLabel.setTextFill(Color.GREEN);
+        taskLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+
+        Label dateLabel = new Label(bb);
+        dateLabel.setPrefWidth(150);
+        dateLabel.setTextFill(Color.BLUE);
+        dateLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 14));
+
+        Label T_Id= new Label(String.valueOf(rowCount+1));
+        T_Id.setVisible(false);
+
+        closeString.setStyle("-fx-background-color: #0000FF; -fx-text-fill: #FFFFFF");
         closeString.setOnAction(e -> {
             HBox hbox1 = (HBox) closeString.getParent();
             Label QNm = (Label) hbox1.getChildren().get(1);
@@ -310,13 +332,13 @@ public class IndexController implements Initializable{
                 System.out.println("Inserted into history");
 
                 String sqlQuery2 = "DELETE FROM TASK WHERE USER_Id=? AND TASK_ID=? AND TASK_NAME=? AND TASK_DATE=? AND TASK_TYPE=?";
-                PreparedStatement Statement2 = con.prepareStatement(sqlQuery2);
-                statement.setInt(1, OurPerson.UserId);
-                statement.setInt(2, Integer.parseInt((QId.getText())));
-                statement.setString(3, QNm.getText());
-                statement.setString(4, "to_date("+QDt.getText()+",'mm/dd/yyyy')");
-                statement.setString(5, QTy.getText());
-                statement.executeUpdate();
+                PreparedStatement statement2 = con.prepareStatement(sqlQuery2);
+                statement2.setInt(1, OurPerson.UserId);
+                statement2.setInt(2, Integer.parseInt((QId.getText())));
+                statement2.setString(3, QNm.getText());
+                statement2.setString(4, "to_date("+QDt.getText()+",'mm/dd/yyyy')");
+                statement2.setString(5, QTy.getText());
+                statement2.executeUpdate();
                 System.out.println("removed from task table");
                 con.close();
             } catch (SQLException eXX) {
@@ -327,30 +349,13 @@ public class IndexController implements Initializable{
             UpdateActivityChart(QTy.getText(),-1,daysBetween,QNm.getText());
         });
 
-        Label taskLabel = new Label(aa);
-        taskLabel.setPrefWidth(250);
-        taskLabel.setTextFill(Color.RED);
-        taskLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
-
-        Label taskType = new Label(_TaskType);
-        taskLabel.setPrefWidth(200);
-        taskLabel.setTextFill(Color.GREEN);
-        taskLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
-
-        Label dateLabel = new Label(bb);
-        dateLabel.setPrefWidth(150);
-        dateLabel.setTextFill(Color.BLUE);
-        dateLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 14));
-
-        closeString.setStyle("-fx-background-color: #0000FF; -fx-text-fill: #FFFFFF");
-
         hbox.getChildren().add(taskLabel);
         hbox.getChildren().add(dateLabel);
         hbox.getChildren().add(taskType);
-        hbox.getChildren().add(new Label(String.valueOf(rowCount+1)));
+        hbox.getChildren().add(T_Id);
         hbox.getChildren().add(closeString);
-
         TodoList.getItems().add(hbox);
+
         java.sql.Connection con = null;
         try {
             Class.forName("oracle.jdbc.OracleDriver");

@@ -108,7 +108,7 @@ public class SignUpController {
                 throw new RuntimeException(e);
             }
         }
-    };
+    }
     @FXML
     protected void onLogInLinkClick(ActionEvent event) throws IOException {
         root= FXMLLoader.load(getClass().getResource("hello-view.fxml"));
