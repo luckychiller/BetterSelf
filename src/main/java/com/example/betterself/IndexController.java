@@ -143,7 +143,6 @@ public class IndexController implements Initializable{
             con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "user1156");
             String sql="SELECT * FROM BETTERUSER ORDER BY POINTS DESC";
             PreparedStatement statement=con.prepareStatement(sql);
-            System.out.println(6);
             ResultSet rs_ = statement.executeQuery();
             while (rs_.next()) {
                 Label name = new Label(rs_.getString("NAME"));
@@ -168,7 +167,6 @@ public class IndexController implements Initializable{
                 TopGuys.getItems().add(hBox);
             }
             con.close();
-            System.out.println(77);
         } catch (SQLException e) {
             System.out.println(1);
             throw new RuntimeException(e);
@@ -185,7 +183,7 @@ public class IndexController implements Initializable{
         series1.setName("Past Activity");
         timelineChart.getData().add(series1);
         //add items from the history table
-
+        //update the time chart
 
         //////////////////////////////////////////////////////////////////////
 
@@ -347,6 +345,7 @@ public class IndexController implements Initializable{
             TodoList.getItems().remove(hbox1);
             System.out.println("item removed");
             UpdateActivityChart(QTy.getText(),-1,daysBetween,QNm.getText());
+            //update points and refresh the leaderboard
         });
 
         hbox.getChildren().add(taskLabel);
@@ -442,5 +441,6 @@ public class IndexController implements Initializable{
         stage.setTitle("BetterSelf -> Help");
         stage.setScene(scene);
         stage.show();
+        //save data to the database
     }
 }

@@ -12,6 +12,5 @@ public class UserData implements Serializable {
     public int Total_Streaks;
     public int Total_Daily;
     public int Total_DeadLifts;
-
     public int Points;
 }
